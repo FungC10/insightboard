@@ -1,13 +1,14 @@
 'use client'
 
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts'
+import { CHART_CONFIG } from '@/lib/constants'
 
 interface PriceLineProps {
   data: { t: number; p: number }[]
   height?: number
 }
 
-export default function PriceLine({ data, height = 200 }: PriceLineProps) {
+export default function PriceLine({ data, height = CHART_CONFIG.defaultHeight }: PriceLineProps) {
   if (!data || data.length === 0) {
     return (
       <div 
@@ -22,7 +23,7 @@ export default function PriceLine({ data, height = 200 }: PriceLineProps) {
   return (
     <div style={{ height }}>
       <ResponsiveContainer width="100%" height="100%">
-        <LineChart data={data}>
+        <LineChart data={data} margin={CHART_CONFIG.margins}>
           <XAxis 
             dataKey="t" 
             type="number" 
@@ -39,8 +40,8 @@ export default function PriceLine({ data, height = 200 }: PriceLineProps) {
           <Line 
             type="monotone" 
             dataKey="p" 
-            stroke="#3b82f6" 
-            strokeWidth={2}
+            stroke={CHART_CONFIG.strokeColor}
+            strokeWidth={CHART_CONFIG.strokeWidth}
             dot={false}
           />
         </LineChart>
