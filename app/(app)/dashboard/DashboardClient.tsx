@@ -30,7 +30,7 @@ function sliceDataByTimeframe(data: { t: number; p: number }[], timeframe: Timef
 
 export default function DashboardClient() {
   const [timeframe, setTimeframe] = useState<Timeframe>('24h')
-  const { data: coins, isLoading, error } = useCoins(['bitcoin', 'ethereum'])
+  const { data: coins, isLoading, error, refetch } = useCoins(['bitcoin', 'ethereum'])
 
   if (isLoading) {
     return (
@@ -48,8 +48,19 @@ export default function DashboardClient() {
     return (
       <div className="p-6">
         <h1 className="text-2xl font-bold mb-4">Crypto Dashboard</h1>
-        <div className="text-red-500">
-          Error loading data: {error.message}
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-red-800 font-medium">Failed to load data</h3>
+              <p className="text-red-600 text-sm mt-1">{error.message}</p>
+            </div>
+            <button
+              onClick={() => refetch()}
+              className="bg-red-600 text-white px-4 py-2 rounded text-sm hover:bg-red-700 transition-colors"
+            >
+              Retry
+            </button>
+          </div>
         </div>
       </div>
     )
