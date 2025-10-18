@@ -47,10 +47,77 @@ const FAKE_COINS: Coin[] = [
   },
 ]
 
-// Temporary stub for real provider
+// Real provider implementation with rate limiting
 async function providerFetchCoins(ids: string[]): Promise<Coin[]> {
-  // This would call a real API like CoinGecko
-  throw new Error('Provider not implemented yet')
+  const apiKey = process.env.PROVIDER_API_KEY
+  if (!apiKey) {
+    throw new Error('PROVIDER_API_KEY not configured')
+  }
+
+  const baseUrl = 'https://api.coingecko.com/api/v3'
+  const idsParam = ids.join(',')
+  
+  // Fetch current prices
+  const pricesResponse = await fetchWithBackoff(
+    `${baseUrl}/simple/price?ids=${idsParam}&vs_currencies=usd&include_24hr_change=true`,
+    { headers: { 'x-cg-demo-api-key': apiKey } }
+  )
+  
+  const prices = await pricesResponse.json()
+  
+  // Fetch historical data for each coin
+  const coins: Coin[] = []
+  for (const id of ids) {
+    const priceData = prices[id]
+    if (!priceData) continue
+    
+    // Get 30 days of hourly data
+    const historyResponse = await fetchWithBackoff(
+      `${baseUrl}/coins/${id}/market_chart?vs_currency=usd&days=30&interval=hourly`,
+      { headers: { 'x-cg-demo-api-key': apiKey } }
+    )
+    
+    const historyData = await historyResponse.json()
+    const history: CoinHistoryPoint[] = historyData.prices.map(([timestamp, price]: [number, number]) => ({
+      timestamp,
+      price
+    }))
+    
+    coins.push({
+      id,
+      symbol: id.toUpperCase(),
+      price: priceData.usd,
+      change24h: priceData.usd_24h_change || 0,
+      history
+    })
+  }
+  
+  return coins
+}
+
+// Simple backoff retry for rate limiting
+async function fetchWithBackoff(url: string, options: RequestInit, retries = 2): Promise<Response> {
+  try {
+    const response = await fetch(url, options)
+    
+    if (response.status === 429 && retries > 0) {
+      // Rate limited - wait and retry
+      await new Promise(resolve => setTimeout(resolve, 500))
+      return fetchWithBackoff(url, options, retries - 1)
+    }
+    
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+    }
+    
+    return response
+  } catch (error) {
+    if (retries > 0) {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      return fetchWithBackoff(url, options, retries - 1)
+    }
+    throw error
+  }
 }
 
 // Main fetcher function
