@@ -3,9 +3,6 @@ export default function About() {
     <div className="bg-white">
       {/* Hero Section */}
       <section className="relative py-24 bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50 overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%239C92AC\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
@@ -131,87 +128,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Team Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Meet Our Team
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The passionate individuals behind InsightBoard's success.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {/* Team Member 1 */}
-            <div className="text-center group">
-              <div className="relative mb-6">
-                <div className="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-4xl font-bold text-white">AS</span>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Alex Smith</h3>
-              <p className="text-blue-600 font-semibold mb-4">CEO & Founder</p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Former Goldman Sachs quant with 10+ years in fintech. 
-                Passionate about democratizing financial data.
-              </p>
-            </div>
-
-            {/* Team Member 2 */}
-            <div className="text-center group">
-              <div className="relative mb-6">
-                <div className="w-32 h-32 bg-gradient-to-br from-green-500 to-blue-600 rounded-full mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-4xl font-bold text-white">MJ</span>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Maria Johnson</h3>
-              <p className="text-green-600 font-semibold mb-4">CTO</p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Ex-Google engineer specializing in real-time data systems. 
-                Leads our technical architecture and innovation.
-              </p>
-            </div>
-
-            {/* Team Member 3 */}
-            <div className="text-center group">
-              <div className="relative mb-6">
-                <div className="w-32 h-32 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <span className="text-4xl font-bold text-white">DC</span>
-                </div>
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                </div>
-              </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">David Chen</h3>
-              <p className="text-purple-600 font-semibold mb-4">Head of Product</p>
-              <p className="text-gray-600 text-sm leading-relaxed">
-                Former Coinbase product manager with deep crypto expertise. 
-                Focuses on user experience and market insights.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="relative py-24 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"2\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-40"></div>
-
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl md:text-6xl font-bold text-white mb-6">
             Ready to Join Our
