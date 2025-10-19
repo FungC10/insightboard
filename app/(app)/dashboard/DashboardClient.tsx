@@ -1,8 +1,8 @@
 'use client'
 
 import { useCoins } from '@/lib/useCoins'
-import { PriceLine } from '@/components/charts/PriceLine'
-import { StatCard } from '@/components/ui/StatCard'
+import PriceLine from '@/components/charts/PriceLine'
+import StatCard from '@/components/ui/StatCard'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 

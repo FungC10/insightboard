@@ -9,8 +9,11 @@ export const CoinHistoryPointSchema = z.object({
 export const CoinSchema = z.object({
   id: z.string().min(1),
   symbol: z.string().min(1),
-  price: z.number().positive(),
-  change24h: z.number(),
+  name: z.string().min(1),
+  currentPrice: z.number().positive(),
+  priceChange24h: z.number(),
+  marketCap: z.number().positive(),
+  totalVolume: z.number().positive(),
   history: z.array(CoinHistoryPointSchema),
 })
 

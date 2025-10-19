@@ -27,22 +27,31 @@ const FAKE_COINS: Coin[] = [
   {
     id: 'bitcoin',
     symbol: 'BTC',
-    price: 43250.50,
-    change24h: 2.34,
+    name: 'Bitcoin',
+    currentPrice: 43250.50,
+    priceChange24h: 2.34,
+    marketCap: 850000000000,
+    totalVolume: 25000000000,
     history: generateFakeHistory(43250.50),
   },
   {
     id: 'ethereum',
     symbol: 'ETH',
-    price: 2650.75,
-    change24h: -1.23,
+    name: 'Ethereum',
+    currentPrice: 2650.75,
+    priceChange24h: -1.23,
+    marketCap: 320000000000,
+    totalVolume: 15000000000,
     history: generateFakeHistory(2650.75),
   },
   {
     id: 'cardano',
     symbol: 'ADA',
-    price: 0.485,
-    change24h: 0.87,
+    name: 'Cardano',
+    currentPrice: 0.485,
+    priceChange24h: 0.87,
+    marketCap: 17000000000,
+    totalVolume: 500000000,
     history: generateFakeHistory(0.485),
   },
 ]
@@ -86,8 +95,11 @@ async function providerFetchCoins(ids: string[]): Promise<Coin[]> {
     coins.push({
       id,
       symbol: id.toUpperCase(),
-      price: priceData.usd,
-      change24h: priceData.usd_24h_change || 0,
+      name: id.charAt(0).toUpperCase() + id.slice(1),
+      currentPrice: priceData.usd,
+      priceChange24h: priceData.usd_24h_change || 0,
+      marketCap: priceData.usd * 1000000, // Mock market cap
+      totalVolume: priceData.usd * 100000, // Mock volume
       history
     })
   }

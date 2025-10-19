@@ -2,8 +2,11 @@
 export interface Coin {
   id: string
   symbol: string
-  price: number
-  change24h: number
+  name: string
+  currentPrice: number
+  priceChange24h: number
+  marketCap: number
+  totalVolume: number
   history: CoinHistoryPoint[]
 }
 
