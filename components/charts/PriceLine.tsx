@@ -106,9 +106,15 @@ export default function PriceLine({
   const stepMs = estimateStepMs(data)
   const targetMs = rangeSmoothingMs[range] || 0
   const smoothingFactor = coinSmoothingFactor[symbol] || 1
-  const rawWindow = Math.max(1, Math.round((targetMs / stepMs) * smoothingFactor))
+  const rawWindow = Math.max(
+    1,
+    Math.round((targetMs / stepMs) * smoothingFactor)
+  )
   const cappedWindow = Math.min(rawWindow, data.length)
-  const window = cappedWindow % 2 === 0 ? Math.min(cappedWindow + 1, data.length) : cappedWindow
+  const window =
+    cappedWindow % 2 === 0
+      ? Math.min(cappedWindow + 1, data.length)
+      : cappedWindow
 
   // Apply smoothing for presentation only
   const displayData = movingAverage(data, window)
