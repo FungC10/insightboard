@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getFakeCoins } from '@/lib/fakeData'
+import { getOrCreateMarketState } from '@/lib/marketState'
 import { CoinsResponseSchema } from '@/lib/zod'
 import { TimeRange } from '@/lib/types'
 
@@ -37,8 +38,11 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Generate coins with history for the requested range
-    const coins = getFakeCoins(ids, range)
+    // Get or create market state (persists across requests)
+    const marketState = getOrCreateMarketState()
+
+    // Generate coins with market state-aware history and prices
+    const coins = getFakeCoins(ids, marketState, range)
 
     if (coins.length === 0) {
       return NextResponse.json(

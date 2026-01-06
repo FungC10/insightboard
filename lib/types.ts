@@ -1,6 +1,13 @@
 // Time range types
 export type TimeRange = '1D' | '7D' | '1M' | '1Y'
 
+// Market state for persistent pseudo-random simulation
+export interface MarketState {
+  seed: number
+  startTime: number
+  basePrices: Record<string, number>
+}
+
 // Core data types for InsightBoard
 export interface Coin {
   id: string
