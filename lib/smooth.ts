@@ -8,9 +8,14 @@ export function movingAverage(
 ): { timestamp: number; price: number }[] {
   if (window <= 1 || !data || data.length === 0) return data
 
+  // Use a centered window to avoid "lagging" the line visually.
+  // Near the edges, the window shrinks gracefully.
+  const half = Math.floor(window / 2)
+
   return data.map((point, i) => {
-    const start = Math.max(0, i - window + 1)
-    const slice = data.slice(start, i + 1)
+    const start = Math.max(0, i - half)
+    const end = Math.min(data.length - 1, i + half)
+    const slice = data.slice(start, end + 1)
     const avg = slice.reduce((sum, p) => sum + p.price, 0) / slice.length
 
     return { ...point, price: Math.round(avg * 100) / 100 }

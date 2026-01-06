@@ -20,19 +20,36 @@ interface PriceLineProps {
   color?: string
 }
 
-// Range-based smoothing windows
-const rangeSmoothing: Record<TimeRange, number> = {
-  '1D': 1,
-  '7D': 3,
-  '1M': 5,
-  '1Y': 9,
-}
-
 // Coin-specific smoothing factors
 const coinSmoothingFactor: Record<string, number> = {
   BTC: 1.4,
   ETH: 1.1,
   ADA: 0.9,
+}
+
+// Time-based smoothing targets (how much time to "average over" for each range)
+const rangeSmoothingMs: Record<TimeRange, number> = {
+  '1D': 60 * 60 * 1000, // ~1 hour
+  '7D': 12 * 60 * 60 * 1000, // ~12 hours
+  '1M': 3 * 24 * 60 * 60 * 1000, // ~3 days
+  '1Y': 30 * 24 * 60 * 60 * 1000, // ~30 days
+}
+
+function estimateStepMs(data: { timestamp: number; price: number }[]): number {
+  if (!data || data.length < 2) return 1
+
+  // Estimate from the first few deltas to avoid O(n) work and reduce impact of any outliers.
+  const sampleCount = Math.min(20, data.length - 1)
+  const deltas: number[] = []
+
+  for (let i = 1; i <= sampleCount; i++) {
+    const d = data[i].timestamp - data[i - 1].timestamp
+    if (Number.isFinite(d) && d > 0) deltas.push(d)
+  }
+
+  if (deltas.length === 0) return 1
+  deltas.sort((a, b) => a - b)
+  return deltas[Math.floor(deltas.length / 2)]
 }
 
 // Format timestamp based on range
@@ -85,10 +102,13 @@ export default function PriceLine({
     )
   }
 
-  // Calculate smoothing window based on range and coin
-  const baseWindow = rangeSmoothing[range] || 1
+  // Calculate smoothing window based on time per point and coin
+  const stepMs = estimateStepMs(data)
+  const targetMs = rangeSmoothingMs[range] || 0
   const smoothingFactor = coinSmoothingFactor[symbol] || 1
-  const window = Math.round(baseWindow * smoothingFactor)
+  const rawWindow = Math.max(1, Math.round((targetMs / stepMs) * smoothingFactor))
+  const cappedWindow = Math.min(rawWindow, data.length)
+  const window = cappedWindow % 2 === 0 ? Math.min(cappedWindow + 1, data.length) : cappedWindow
 
   // Apply smoothing for presentation only
   const displayData = movingAverage(data, window)

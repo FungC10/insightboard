@@ -5,10 +5,12 @@ const RANGE_CONFIG: Record<
   TimeRange,
   { points: number; stepMs: number; volatility: number }
 > = {
-  '1D': { points: 96, stepMs: 15 * 60 * 1000, volatility: 0.015 }, // 15 min steps, low volatility
-  '7D': { points: 168, stepMs: 60 * 60 * 1000, volatility: 0.025 }, // 1 hour steps, medium volatility
-  '1M': { points: 120, stepMs: 6 * 60 * 60 * 1000, volatility: 0.04 }, // 6 hour steps, higher volatility
-  '1Y': { points: 365, stepMs: 24 * 60 * 60 * 1000, volatility: 0.06 }, // 1 day steps, highest volatility
+  // NOTE: Volatility here is "per displayed point". Longer ranges should look smoother
+  // because they represent more aggregated time slices.
+  '1D': { points: 96, stepMs: 15 * 60 * 1000, volatility: 0.06 }, // 15 min steps, highest volatility
+  '7D': { points: 168, stepMs: 60 * 60 * 1000, volatility: 0.045 }, // 1 hour steps, high volatility
+  '1M': { points: 120, stepMs: 6 * 60 * 60 * 1000, volatility: 0.03 }, // 6 hour steps, medium volatility
+  '1Y': { points: 365, stepMs: 24 * 60 * 60 * 1000, volatility: 0.018 }, // 1 day steps, low volatility
 }
 
 /**
@@ -48,21 +50,44 @@ export function generateMarketHistory(
     const timestamp = now - (config.points - i - 1) * config.stepMs
     const pointTimeElapsed =
       (timestamp - marketState.startTime) / (1000 * 60 * 60)
+    const pointTimeElapsedDays = pointTimeElapsed / 24
 
     // Long-term trend (slow drift) - depends on time elapsed
     const trend =
       Math.sin(pointTimeElapsed * 0.01 + marketPhase) * 0.02 +
       Math.cos(pointTimeElapsed * 0.007 + marketPhase * 0.5) * 0.015
 
-    // Volatility component (short-term fluctuations) - depends on point index and coin seed
-    const volatility =
-      (Math.sin(i * 0.1 + phase + pointTimeElapsed * 0.1) +
-        Math.cos(i * 0.15 + phase * 0.5 + pointTimeElapsed * 0.08) +
-        Math.sin(i * 0.05 + phase * 1.2 + pointTimeElapsed * 0.12) * 0.5) *
-      config.volatility
+    // Volatility component (short-term fluctuations)
+    // Use REAL time (hours/days), not point index, so each range has a distinct "shape"
+    // instead of looking like the same waveform sampled differently.
+    const TWO_PI = Math.PI * 2
+    const dailyWave =
+      Math.sin((pointTimeElapsed * TWO_PI) / 24 + phase) * 0.9 +
+      Math.cos((pointTimeElapsed * TWO_PI) / 12 + phase * 0.7) * 0.6
+    const weeklyWave =
+      Math.sin((pointTimeElapsedDays * TWO_PI) / 7 + marketPhase) * 0.7 +
+      Math.cos((pointTimeElapsedDays * TWO_PI) / 3.5 + phase * 0.2) * 0.35
+    const monthlyWave =
+      Math.sin((pointTimeElapsedDays * TWO_PI) / 30 + phase * 0.9) * 0.55 +
+      Math.cos((pointTimeElapsedDays * TWO_PI) / 15 + marketPhase * 0.4) * 0.25
+    const yearlyWave =
+      Math.sin((pointTimeElapsedDays * TWO_PI) / 365 + marketPhase * 0.3) * 0.4
+
+    const volatilityMix: Record<TimeRange, number> = {
+      // Heavier intraday noise for short ranges; heavier seasonal components for long ranges.
+      '1D': dailyWave * 0.9 + weeklyWave * 0.1,
+      '7D': dailyWave * 0.55 + weeklyWave * 0.45,
+      '1M': weeklyWave * 0.5 + monthlyWave * 0.5,
+      '1Y': monthlyWave * 0.55 + yearlyWave * 0.45,
+    }
+
+    const volatility = volatilityMix[range] * config.volatility
 
     // Small deterministic noise based on seed and time
-    const noise = (pseudoRandom(coinSeed, i + pointTimeElapsed) - 0.5) * 0.005
+    const noiseKey = Math.floor(pointTimeElapsed) + i * 13
+    const noise =
+      (pseudoRandom(coinSeed + marketState.seed, noiseKey) - 0.5) *
+      (config.volatility * 0.25)
 
     // Combine all components
     const price = basePrice * (1 + trend + volatility + noise)
