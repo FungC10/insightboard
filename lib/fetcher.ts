@@ -14,8 +14,12 @@ export async function fetchCoins(ids: string[]): Promise<Coin[]> {
   const response = await fetch(`/api/coins?ids=${idsParam}`)
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: 'Unknown error' }))
-    throw new Error(error.error || `HTTP ${response.status}: ${response.statusText}`)
+    const error = await response
+      .json()
+      .catch(() => ({ error: 'Unknown error' }))
+    throw new Error(
+      error.error || `HTTP ${response.status}: ${response.statusText}`
+    )
   }
 
   const data = await response.json()

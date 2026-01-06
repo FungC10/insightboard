@@ -1,7 +1,10 @@
 import { Coin } from './types'
 
 // Generate deterministic fake history data
-function generateFakeHistory(basePrice: number, points: number = 100): Array<{ timestamp: number; price: number }> {
+function generateFakeHistory(
+  basePrice: number,
+  points: number = 100
+): Array<{ timestamp: number; price: number }> {
   const history: Array<{ timestamp: number; price: number }> = []
   const now = Date.now()
   const stepMs = 5 * 60 * 1000 // 5 minutes
@@ -11,7 +14,7 @@ function generateFakeHistory(basePrice: number, points: number = 100): Array<{ t
     // Add some realistic price variation (±2% max)
     const variation = (Math.sin(i * 0.1) + Math.cos(i * 0.15)) * 0.02
     const price = basePrice * (1 + variation)
-    
+
     history.push({
       timestamp,
       price: Math.round(price * 100) / 100,
@@ -27,11 +30,11 @@ export const FAKE_COINS: Coin[] = [
     id: 'bitcoin',
     symbol: 'BTC',
     name: 'Bitcoin',
-    currentPrice: 43250.50,
+    currentPrice: 43250.5,
     priceChange24h: 2.34,
     marketCap: 850000000000,
     totalVolume: 25000000000,
-    history: generateFakeHistory(43250.50),
+    history: generateFakeHistory(43250.5),
   },
   {
     id: 'ethereum',
@@ -54,5 +57,3 @@ export const FAKE_COINS: Coin[] = [
     history: generateFakeHistory(0.485),
   },
 ]
-
-

@@ -13,6 +13,7 @@ All fake data is generated and stored in `/lib/fakeData.ts`. The data is served 
 The fake data includes three cryptocurrencies:
 
 ### Bitcoin (BTC)
+
 - **ID**: `bitcoin`
 - **Symbol**: `BTC`
 - **Current Price**: $43,250.50
@@ -21,6 +22,7 @@ The fake data includes three cryptocurrencies:
 - **Total Volume**: $25,000,000,000
 
 ### Ethereum (ETH)
+
 - **ID**: `ethereum`
 - **Symbol**: `ETH`
 - **Current Price**: $2,650.75
@@ -29,6 +31,7 @@ The fake data includes three cryptocurrencies:
 - **Total Volume**: $15,000,000,000
 
 ### Cardano (ADA)
+
 - **ID**: `cardano`
 - **Symbol**: `ADA`
 - **Current Price**: $0.485
@@ -42,7 +45,7 @@ Each coin includes a price history with 100 data points generated using a determ
 
 ### Algorithm Details
 
-1. **Time Range**: 
+1. **Time Range**:
    - Data points span approximately 8.3 hours (100 points × 5 minutes)
    - Timestamps are calculated backwards from the current time
 
@@ -69,7 +72,7 @@ function generateFakeHistory(basePrice: number, points: number = 100) {
     const timestamp = now - (points - i - 1) * stepMs
     const variation = (Math.sin(i * 0.1) + Math.cos(i * 0.15)) * 0.02
     const price = basePrice * (1 + variation)
-    
+
     history.push({
       timestamp,
       price: Math.round(price * 100) / 100,
@@ -87,17 +90,21 @@ function generateFakeHistory(basePrice: number, points: number = 100) {
 All data access flows through the `/api/coins` endpoint, which serves as the single source of data for the application.
 
 **Endpoint:**
+
 ```
 GET /api/coins?ids=bitcoin,ethereum
 ```
 
 **Parameters:**
+
 - `ids`: Comma-separated list of coin IDs to fetch (e.g., `bitcoin,ethereum`)
 
 **Returns:**
+
 - `{ coins: Coin[] }`: JSON response with array of coin objects matching the requested IDs
 
 **Behavior:**
+
 - Filters `FAKE_COINS` array by the requested IDs
 - Returns 404 if no coins match the requested IDs
 - Validates response with Zod schemas
@@ -133,19 +140,19 @@ Each coin object follows this structure:
 
 ```typescript
 interface Coin {
-  id: string                    // Unique identifier (e.g., 'bitcoin')
-  symbol: string                // Ticker symbol (e.g., 'BTC')
-  name: string                  // Full name (e.g., 'Bitcoin')
-  currentPrice: number          // Current price in USD
-  priceChange24h: number        // 24h price change percentage
-  marketCap: number             // Market capitalization in USD
-  totalVolume: number            // 24h trading volume in USD
-  history: CoinHistoryPoint[]    // Array of historical price points
+  id: string // Unique identifier (e.g., 'bitcoin')
+  symbol: string // Ticker symbol (e.g., 'BTC')
+  name: string // Full name (e.g., 'Bitcoin')
+  currentPrice: number // Current price in USD
+  priceChange24h: number // 24h price change percentage
+  marketCap: number // Market capitalization in USD
+  totalVolume: number // 24h trading volume in USD
+  history: CoinHistoryPoint[] // Array of historical price points
 }
 
 interface CoinHistoryPoint {
-  timestamp: number              // Unix timestamp in milliseconds
-  price: number                  // Price at that timestamp
+  timestamp: number // Unix timestamp in milliseconds
+  price: number // Price at that timestamp
 }
 ```
 
@@ -160,6 +167,7 @@ The fake data is integrated into the application through:
 5. **Components**: Dashboard and chart components consume the data via the `useCoins` hook
 
 **Data Flow:**
+
 ```
 Components → useCoins() → fetchCoins() → /api/coins → FAKE_COINS
 ```
@@ -209,4 +217,3 @@ To add more coins or modify existing data:
 - All prices are in USD
 - Timestamps are in milliseconds (Unix epoch)
 - The API route uses `export const dynamic = 'force-dynamic'` for proper Next.js behavior
-

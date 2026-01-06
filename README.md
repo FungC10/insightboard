@@ -32,29 +32,32 @@ A modern, professional-grade cryptocurrency market dashboard built with Next.js 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
 - **No API key required** - The app uses locally generated fake data
 
 ### Installation
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/pazu/insightboard.git
    cd insightboard
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
 
 3. **Run the development server**
+
    ```bash
    npm run dev
    ```
 
-5. **Open your browser**
+4. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
@@ -93,11 +96,13 @@ insightboard/
 **The app uses a mocked API layer backed by deterministic fake data.** No API configuration or API keys are required.
 
 The fake data includes:
+
 - **Bitcoin (BTC)** - Sample price data with realistic variations
 - **Ethereum (ETH)** - Sample price data with realistic variations
 - **Cardano (ADA)** - Sample price data with realistic variations
 
 All data is generated locally using deterministic algorithms that create realistic price history with natural variations. The data flows through the `/api/coins` endpoint, providing a production-shaped architecture with demo-safe data. This ensures:
+
 - **Stable demos** - Reproducible results every time
 - **Reproducible charts** - Consistent data for testing
 - **No external dependencies** - Works completely offline
@@ -107,11 +112,13 @@ All data is generated locally using deterministic algorithms that create realist
 The app uses the `/api/coins` endpoint as the single source of data. All data access flows through this API boundary, which is backed by deterministic fake data.
 
 **API Endpoint:**
+
 ```
 GET /api/coins?ids=bitcoin,ethereum
 ```
 
 **Response Format:**
+
 ```json
 {
   "coins": [
@@ -119,7 +126,7 @@ GET /api/coins?ids=bitcoin,ethereum
       "id": "bitcoin",
       "symbol": "BTC",
       "name": "Bitcoin",
-      "currentPrice": 43250.50,
+      "currentPrice": 43250.5,
       "priceChange24h": 2.34,
       "marketCap": 850000000000,
       "totalVolume": 25000000000,
@@ -135,6 +142,7 @@ GET /api/coins?ids=bitcoin,ethereum
 ```
 
 **Architecture:**
+
 - All data flows through `/api/coins` endpoint
 - Fake data generation lives in `lib/fakeData.ts`
 - React Query hooks fetch via HTTP (`fetch('/api/coins?...')`)
@@ -175,6 +183,7 @@ The project uses Tailwind CSS with custom animations and effects:
 ### Other Platforms
 
 The app is compatible with any platform that supports Next.js:
+
 - Netlify
 - Railway
 - AWS Amplify
@@ -219,7 +228,3 @@ If you have any questions or need help, please:
 ---
 
 **Built with ❤️ by [pazu](https://github.com/pazu)**
-
-
-
-

@@ -12,8 +12,9 @@ export default function About() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-              We're building the future of cryptocurrency analytics, empowering traders with 
-              professional-grade tools and real-time market insights.
+              We&apos;re building the future of cryptocurrency analytics,
+              empowering traders with professional-grade tools and real-time
+              market insights.
             </p>
           </div>
         </div>
@@ -28,18 +29,28 @@ export default function About() {
                 Our Mission
               </h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                To democratize access to professional-grade cryptocurrency analytics and 
-                empower traders of all levels with the tools they need to succeed in the 
-                dynamic crypto markets.
+                To democratize access to professional-grade cryptocurrency
+                analytics and empower traders of all levels with the tools they
+                need to succeed in the dynamic crypto markets.
               </p>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-                We believe that everyone deserves access to the same level of market 
-                intelligence that institutional traders have, regardless of their experience 
-                or capital.
+                We believe that everyone deserves access to the same level of
+                market intelligence that institutional traders have, regardless
+                of their experience or capital.
               </p>
               <div className="flex items-center text-blue-600 font-semibold">
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 mr-2"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
                 Trusted by 50,000+ traders worldwide
               </div>
@@ -48,19 +59,29 @@ export default function About() {
               <div className="bg-gradient-to-br from-blue-100 to-purple-100 rounded-3xl p-8 shadow-2xl">
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">$2.5B+</div>
+                    <div className="text-3xl font-bold text-blue-600 mb-2">
+                      $2.5B+
+                    </div>
                     <div className="text-gray-600 text-sm">Volume Tracked</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-purple-600 mb-2">500+</div>
-                    <div className="text-gray-600 text-sm">Cryptocurrencies</div>
+                    <div className="text-3xl font-bold text-purple-600 mb-2">
+                      500+
+                    </div>
+                    <div className="text-gray-600 text-sm">
+                      Cryptocurrencies
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600 mb-2">99.9%</div>
+                    <div className="text-3xl font-bold text-green-600 mb-2">
+                      99.9%
+                    </div>
                     <div className="text-gray-600 text-sm">Uptime</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-orange-600 mb-2">24/7</div>
+                    <div className="text-3xl font-bold text-orange-600 mb-2">
+                      24/7
+                    </div>
                     <div className="text-gray-600 text-sm">Support</div>
                   </div>
                 </div>
@@ -86,42 +107,80 @@ export default function About() {
             {/* Value 1 */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
               <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 10V3L4 14h7v7l9-11h-7z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Innovation</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Innovation
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                We continuously push the boundaries of what's possible in crypto analytics, 
-                leveraging cutting-edge technology to deliver superior insights.
+                We continuously push the boundaries of what&apos;s possible in
+                crypto analytics, leveraging cutting-edge technology to deliver
+                superior insights.
               </p>
             </div>
 
             {/* Value 2 */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
               <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Transparency</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Transparency
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                We believe in complete transparency in our data sources, methodologies, 
-                and pricing. No hidden fees, no surprises.
+                We believe in complete transparency in our data sources,
+                methodologies, and pricing. No hidden fees, no surprises.
               </p>
             </div>
 
             {/* Value 3 */}
             <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
               <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                <svg
+                  className="w-8 h-8 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                  />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Community</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                Community
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                We're building more than a platform – we're fostering a community of 
-                informed traders who support and learn from each other.
+                We&apos;re building more than a platform – we&apos;re fostering
+                a community of informed traders who support and learn from each
+                other.
               </p>
             </div>
           </div>
@@ -136,8 +195,9 @@ export default function About() {
             <span className="block">Mission?</span>
           </h2>
           <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-            Be part of the future of cryptocurrency trading. Start your journey with 
-            InsightBoard today and experience the difference professional-grade analytics make.
+            Be part of the future of cryptocurrency trading. Start your journey
+            with InsightBoard today and experience the difference
+            professional-grade analytics make.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -147,8 +207,18 @@ export default function About() {
             >
               <span className="flex items-center">
                 Get Started Free
-                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                <svg
+                  className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M13 7l5 5m0 0l-5 5m5-5H6"
+                  />
                 </svg>
               </span>
             </a>
@@ -159,8 +229,18 @@ export default function About() {
             >
               <span className="flex items-center">
                 Explore Dashboard
-                <svg className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <svg
+                  className="w-5 h-5 ml-2 group-hover:scale-110 transition-transform"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
                 </svg>
               </span>
             </a>
