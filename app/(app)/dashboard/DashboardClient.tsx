@@ -13,10 +13,12 @@ export default function DashboardClient() {
   const {
     data: coins,
     isLoading,
+    isFetching,
     error,
   } = useCoins(['bitcoin', 'ethereum'], range)
 
-  if (isLoading) {
+  // Only show full loading skeleton on initial load (no data yet)
+  if (isLoading && !coins) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -170,22 +172,48 @@ export default function DashboardClient() {
         </div>
 
         {/* Time Range Selector */}
-        <div className="mb-8 flex justify-center">
+        <div className="mb-8 flex justify-center items-center gap-4">
           <div className="inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-gray-200">
             {(['1D', '7D', '1M', '1Y'] as TimeRange[]).map(r => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
+                disabled={isFetching}
                 className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
                   range === r
                     ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
-                }`}
+                } ${isFetching ? 'opacity-50 cursor-not-allowed' : ''}`}
               >
                 {r}
               </button>
             ))}
           </div>
+          {isFetching && (
+            <div className="flex items-center gap-2 text-gray-500 text-sm">
+              <svg
+                className="animate-spin h-4 w-4"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+              <span>Updating...</span>
+            </div>
+          )}
         </div>
 
         {/* Charts Grid */}
