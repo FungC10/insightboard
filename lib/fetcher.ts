@@ -1,17 +1,20 @@
-import { Coin } from './types'
+import { Coin, TimeRange } from './types'
 import { CoinsResponseSchema } from './zod'
 
 /**
  * Fetches coin data from the /api/coins endpoint
  * This is the single source of data access for the application
  */
-export async function fetchCoins(ids: string[]): Promise<Coin[]> {
+export async function fetchCoins(
+  ids: string[],
+  range: TimeRange = '1D'
+): Promise<Coin[]> {
   if (ids.length === 0) {
     return []
   }
 
   const idsParam = ids.join(',')
-  const response = await fetch(`/api/coins?ids=${idsParam}`)
+  const response = await fetch(`/api/coins?ids=${idsParam}&range=${range}`)
 
   if (!response.ok) {
     const error = await response

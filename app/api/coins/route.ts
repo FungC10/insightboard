@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { FAKE_COINS } from '@/lib/fakeData'
+import { getFakeCoins } from '@/lib/fakeData'
 import { CoinsResponseSchema } from '@/lib/zod'
+import { TimeRange } from '@/lib/types'
 
 export const dynamic = 'force-dynamic'
 
@@ -8,6 +9,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const idsParam = searchParams.get('ids')
+    const rangeParam = searchParams.get('range') || '1D'
 
     if (!idsParam) {
       return NextResponse.json(
@@ -15,6 +17,12 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       )
     }
+
+    // Validate range
+    const validRanges: TimeRange[] = ['1D', '7D', '1M', '1Y']
+    const range = validRanges.includes(rangeParam as TimeRange)
+      ? (rangeParam as TimeRange)
+      : '1D'
 
     // Parse comma-separated IDs
     const ids = idsParam
@@ -29,8 +37,8 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Filter fake coins by requested IDs
-    const coins = FAKE_COINS.filter(coin => ids.includes(coin.id))
+    // Generate coins with history for the requested range
+    const coins = getFakeCoins(ids, range)
 
     if (coins.length === 0) {
       return NextResponse.json(

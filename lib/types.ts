@@ -1,3 +1,6 @@
+// Time range types
+export type TimeRange = '1D' | '7D' | '1M' | '1Y'
+
 // Core data types for InsightBoard
 export interface Coin {
   id: string

@@ -1,13 +1,16 @@
 'use client'
 
+import { useState } from 'react'
 import { useCoins } from '@/lib/useCoins'
+import { TimeRange } from '@/lib/types'
 import PriceLine from '@/components/charts/PriceLine'
 import StatCard from '@/components/ui/StatCard'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 
 export default function DashboardClient() {
-  const { data: coins, isLoading, error } = useCoins(['bitcoin', 'ethereum'])
+  const [range, setRange] = useState<TimeRange>('1D')
+  const { data: coins, isLoading, error } = useCoins(['bitcoin', 'ethereum'], range)
 
   if (isLoading) {
     return (
@@ -159,6 +162,25 @@ export default function DashboardClient() {
               delta={3.2}
               trend="up"
             />
+          </div>
+        </div>
+
+        {/* Time Range Selector */}
+        <div className="mb-8 flex justify-center">
+          <div className="inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-gray-200">
+            {(['1D', '7D', '1M', '1Y'] as TimeRange[]).map((r) => (
+              <button
+                key={r}
+                onClick={() => setRange(r)}
+                className={`px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${
+                  range === r
+                    ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-md'
+                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                }`}
+              >
+                {r}
+              </button>
+            ))}
           </div>
         </div>
 
