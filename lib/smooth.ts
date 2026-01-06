@@ -16,4 +16,3 @@ export function movingAverage(
     return { ...point, price: Math.round(avg * 100) / 100 }
   })
 }
-

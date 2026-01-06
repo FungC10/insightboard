@@ -104,7 +104,13 @@ export default function PriceLine({
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart data={displayData} margin={CHART_CONFIG.margins}>
           <defs>
-            <linearGradient id={`gradient-${symbol}`} x1="0" y1="0" x2="0" y2="1">
+            <linearGradient
+              id={`gradient-${symbol}`}
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
               <stop offset="5%" stopColor={color} stopOpacity={0.3} />
               <stop offset="95%" stopColor={color} stopOpacity={0} />
             </linearGradient>
@@ -124,10 +130,11 @@ export default function PriceLine({
             tick={{ fontSize: 12 }}
           />
           <Tooltip
-            formatter={(value: number) => [`$${value.toLocaleString()}`, 'Price']}
-            labelFormatter={(label: number) =>
-              formatTimestamp(label, range)
-            }
+            formatter={(value: number) => [
+              `$${value.toLocaleString()}`,
+              'Price',
+            ]}
+            labelFormatter={(label: number) => formatTimestamp(label, range)}
             contentStyle={{
               backgroundColor: 'rgba(255, 255, 255, 0.95)',
               border: '1px solid #e5e7eb',
