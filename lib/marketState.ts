@@ -127,4 +127,3 @@ export function resetMarket(): MarketState {
 
   return newState
 }
-

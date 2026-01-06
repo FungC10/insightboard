@@ -46,7 +46,8 @@ export function generateMarketHistory(
 
   for (let i = 0; i < config.points; i++) {
     const timestamp = now - (config.points - i - 1) * config.stepMs
-    const pointTimeElapsed = (timestamp - marketState.startTime) / (1000 * 60 * 60)
+    const pointTimeElapsed =
+      (timestamp - marketState.startTime) / (1000 * 60 * 60)
 
     // Long-term trend (slow drift) - depends on time elapsed
     const trend =
@@ -151,7 +152,8 @@ function calculate24hChange(
 ): number {
   const now = Date.now()
   const timeElapsed = (now - marketState.startTime) / (1000 * 60 * 60)
-  const timeElapsed24h = (now - 24 * 60 * 60 * 1000 - marketState.startTime) / (1000 * 60 * 60)
+  const timeElapsed24h =
+    (now - 24 * 60 * 60 * 1000 - marketState.startTime) / (1000 * 60 * 60)
 
   const currentPrice = calculateCurrentPrice(basePrice, coinSeed, marketState)
 
