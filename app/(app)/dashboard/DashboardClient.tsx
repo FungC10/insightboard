@@ -247,7 +247,13 @@ export default function DashboardClient() {
                   ${bitcoin.currentPrice.toLocaleString()}
                 </div>
                 <div className="h-80 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4">
-                  <PriceLine data={bitcoin.history} height={320} />
+                  <PriceLine
+                    data={bitcoin.history}
+                    height={320}
+                    range={range}
+                    symbol={bitcoin.symbol}
+                    color="#f97316"
+                  />
                 </div>
               </Card>
             </div>
@@ -282,7 +288,13 @@ export default function DashboardClient() {
                   ${ethereum.currentPrice.toLocaleString()}
                 </div>
                 <div className="h-80 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4">
-                  <PriceLine data={ethereum.history} height={320} />
+                  <PriceLine
+                    data={ethereum.history}
+                    height={320}
+                    range={range}
+                    symbol={ethereum.symbol}
+                    color="#3b82f6"
+                  />
                 </div>
               </Card>
             </div>
