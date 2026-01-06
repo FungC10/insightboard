@@ -45,6 +45,7 @@ export function generateMarketHistory(
 
   // Market-wide seed affects overall trend
   const marketPhase = marketState.seed * 0.123
+  const freq = 1 + (coinSeed % 17) / 100
 
   for (let i = 0; i < config.points; i++) {
     const timestamp = now - (config.points - i - 1) * config.stepMs
@@ -62,16 +63,22 @@ export function generateMarketHistory(
     // instead of looking like the same waveform sampled differently.
     const TWO_PI = Math.PI * 2
     const dailyWave =
-      Math.sin((pointTimeElapsed * TWO_PI) / 24 + phase) * 0.9 +
-      Math.cos((pointTimeElapsed * TWO_PI) / 12 + phase * 0.7) * 0.6
+      Math.sin((pointTimeElapsed * TWO_PI) / (24 / freq) + phase) * 0.9 +
+      Math.cos((pointTimeElapsed * TWO_PI) / (12 / freq) + phase * 0.7) * 0.6
     const weeklyWave =
-      Math.sin((pointTimeElapsedDays * TWO_PI) / 7 + marketPhase) * 0.7 +
-      Math.cos((pointTimeElapsedDays * TWO_PI) / 3.5 + phase * 0.2) * 0.35
+      Math.sin((pointTimeElapsedDays * TWO_PI) / (7 / freq) + marketPhase) *
+        0.7 +
+      Math.cos((pointTimeElapsedDays * TWO_PI) / (3.5 / freq) + phase * 0.2) *
+        0.35
     const monthlyWave =
-      Math.sin((pointTimeElapsedDays * TWO_PI) / 30 + phase * 0.9) * 0.55 +
-      Math.cos((pointTimeElapsedDays * TWO_PI) / 15 + marketPhase * 0.4) * 0.25
+      Math.sin((pointTimeElapsedDays * TWO_PI) / (30 / freq) + phase * 0.9) *
+        0.55 +
+      Math.cos(
+        (pointTimeElapsedDays * TWO_PI) / (15 / freq) + marketPhase * 0.4
+      ) * 0.25
     const yearlyWave =
-      Math.sin((pointTimeElapsedDays * TWO_PI) / 365 + marketPhase * 0.3) * 0.4
+      Math.sin((pointTimeElapsedDays * TWO_PI) / (365 / freq) + marketPhase * 0.3) *
+      0.4
 
     const volatilityMix: Record<TimeRange, number> = {
       // Heavier intraday noise for short ranges; heavier seasonal components for long ranges.
@@ -103,9 +110,9 @@ export function generateMarketHistory(
 
 // Coin seeds for deterministic but distinct chart shapes
 const COIN_SEEDS: Record<string, number> = {
-  bitcoin: 1,
-  ethereum: 2,
-  cardano: 3,
+  bitcoin: 101,
+  ethereum: 202,
+  cardano: 303,
 }
 
 // Base coin metadata (without prices - prices come from market state)

@@ -7,6 +7,7 @@ import PriceLine from '@/components/charts/PriceLine'
 import StatCard from '@/components/ui/StatCard'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
+import { formatUsdPrice } from '@/lib/format'
 
 export default function DashboardClient() {
   const [range, setRange] = useState<TimeRange>('1D')
@@ -244,7 +245,7 @@ export default function DashboardClient() {
                   </Badge>
                 </div>
                 <div className="text-4xl font-bold text-gray-900 mb-6">
-                  ${bitcoin.currentPrice.toLocaleString()}
+                  {formatUsdPrice(bitcoin.currentPrice)}
                 </div>
                 <div className="h-80 bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4">
                   <PriceLine
@@ -285,7 +286,7 @@ export default function DashboardClient() {
                   </Badge>
                 </div>
                 <div className="text-4xl font-bold text-gray-900 mb-6">
-                  ${ethereum.currentPrice.toLocaleString()}
+                  {formatUsdPrice(ethereum.currentPrice)}
                 </div>
                 <div className="h-80 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4">
                   <PriceLine
@@ -357,7 +358,7 @@ export default function DashboardClient() {
                       </div>
                     </td>
                     <td className="text-right py-6 px-6 font-bold text-gray-900 text-lg">
-                      ${coin.currentPrice.toLocaleString()}
+                      {formatUsdPrice(coin.currentPrice)}
                     </td>
                     <td className="text-right py-6 px-6">
                       <Badge

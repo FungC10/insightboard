@@ -7,10 +7,14 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
+  ReferenceArea,
+  ReferenceDot,
 } from 'recharts'
 import { CHART_CONFIG } from '@/lib/constants'
 import { TimeRange } from '@/lib/types'
 import { movingAverage } from '@/lib/smooth'
+import { formatPercentDelta, formatUsdDelta, formatUsdPrice } from '@/lib/format'
+import { useMemo, useState } from 'react'
 
 interface PriceLineProps {
   data: { timestamp: number; price: number }[]
@@ -102,6 +106,16 @@ export default function PriceLine({
     )
   }
 
+  const [dragAnchor, setDragAnchor] = useState<{
+    timestamp: number
+    price: number
+  } | null>(null)
+  const [dragCurrent, setDragCurrent] = useState<{
+    timestamp: number
+    price: number
+  } | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
+
   // Calculate smoothing window based on time per point and coin
   const stepMs = estimateStepMs(data)
   const targetMs = rangeSmoothingMs[range] || 0
@@ -119,6 +133,32 @@ export default function PriceLine({
   // Apply smoothing for presentation only
   const displayData = movingAverage(data, window)
 
+  const comparison = useMemo(() => {
+    if (!dragAnchor || !dragCurrent) return null
+
+    const older =
+      dragAnchor.timestamp <= dragCurrent.timestamp ? dragAnchor : dragCurrent
+    const newer =
+      dragAnchor.timestamp <= dragCurrent.timestamp ? dragCurrent : dragAnchor
+
+    const delta = newer.price - older.price
+    const percent = older.price === 0 ? 0 : (delta / older.price) * 100
+
+    const isUp = delta >= 0
+    const stroke = isUp ? '#16a34a' : '#dc2626'
+    const fill = isUp ? 'rgba(22, 163, 74, 0.14)' : 'rgba(220, 38, 38, 0.14)'
+
+    return {
+      older,
+      newer,
+      delta,
+      percent,
+      stroke,
+      fill,
+      isUp,
+    }
+  }, [dragAnchor, dragCurrent])
+
   // Calculate Y-axis domain with padding
   const prices = displayData.map(d => d.price)
   const minPrice = Math.min(...prices)
@@ -126,9 +166,44 @@ export default function PriceLine({
   const yDomain = [minPrice * 0.98, maxPrice * 1.02]
 
   return (
-    <div style={{ height }}>
+    <div style={{ height }} className="relative">
+      {comparison && !isDragging && (
+        <div className="absolute left-3 top-3 z-10 rounded-lg border border-gray-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
+          <div className="font-semibold text-gray-900">
+            {formatUsdPrice(comparison.newer.price)}
+          </div>
+          <div
+            className="mt-0.5 font-semibold"
+            style={{ color: comparison.stroke }}
+          >
+            {formatUsdDelta(comparison.delta)} ({formatPercentDelta(comparison.percent)})
+          </div>
+        </div>
+      )}
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={displayData} margin={CHART_CONFIG.margins}>
+        <AreaChart
+          data={displayData}
+          margin={CHART_CONFIG.margins}
+          onMouseDown={e => {
+            const p = e?.activePayload?.[0]?.payload as
+              | { timestamp: number; price: number }
+              | undefined
+            if (!p) return
+            setIsDragging(true)
+            setDragAnchor({ timestamp: p.timestamp, price: p.price })
+            setDragCurrent({ timestamp: p.timestamp, price: p.price })
+          }}
+          onMouseMove={e => {
+            if (!isDragging) return
+            const p = e?.activePayload?.[0]?.payload as
+              | { timestamp: number; price: number }
+              | undefined
+            if (!p) return
+            setDragCurrent({ timestamp: p.timestamp, price: p.price })
+          }}
+          onMouseUp={() => setIsDragging(false)}
+          onMouseLeave={() => setIsDragging(false)}
+        >
           <defs>
             <linearGradient
               id={`gradient-${symbol}`}
@@ -157,7 +232,7 @@ export default function PriceLine({
           />
           <Tooltip
             formatter={(value: number) => [
-              `$${value.toLocaleString()}`,
+              formatUsdPrice(value),
               'Price',
             ]}
             labelFormatter={(label: number) => formatTimestamp(label, range)}
@@ -168,6 +243,35 @@ export default function PriceLine({
               padding: '8px 12px',
             }}
           />
+          {comparison && (
+            <>
+              <ReferenceArea
+                x1={comparison.older.timestamp}
+                x2={comparison.newer.timestamp}
+                stroke={comparison.stroke}
+                fill={comparison.fill}
+                ifOverflow="extendDomain"
+              />
+              <ReferenceDot
+                x={comparison.older.timestamp}
+                y={comparison.older.price}
+                r={4}
+                fill={comparison.stroke}
+                stroke="#ffffff"
+                strokeWidth={2}
+                ifOverflow="extendDomain"
+              />
+              <ReferenceDot
+                x={comparison.newer.timestamp}
+                y={comparison.newer.price}
+                r={4}
+                fill={comparison.stroke}
+                stroke="#ffffff"
+                strokeWidth={2}
+                ifOverflow="extendDomain"
+              />
+            </>
+          )}
           <Area
             type="monotone"
             dataKey="price"
