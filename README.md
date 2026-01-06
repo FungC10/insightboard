@@ -9,7 +9,7 @@ A modern, professional-grade cryptocurrency market dashboard built with Next.js 
 
 ## ✨ Features
 
-- **📊 Real-time Market Data** - Live cryptocurrency prices and market information
+- **📊 Local Fake Data** - Uses locally generated fake cryptocurrency data (no API required)
 - **📈 Interactive Charts** - Beautiful price charts with Recharts integration
 - **🎨 Modern UI/UX** - Responsive design with Tailwind CSS and custom animations
 - **⚡ Fast Performance** - Built with Next.js 14 App Router for optimal speed
@@ -25,7 +25,7 @@ A modern, professional-grade cryptocurrency market dashboard built with Next.js 
 - **Data Fetching**: TanStack Query (React Query)
 - **Charts**: Recharts
 - **Validation**: Zod
-- **API**: CoinGecko API
+- **Data**: Local fake data (no external API)
 - **Deployment**: Vercel Ready
 
 ## 🚀 Quick Start
@@ -34,13 +34,13 @@ A modern, professional-grade cryptocurrency market dashboard built with Next.js 
 
 - Node.js 18+ 
 - npm or yarn
-- CoinGecko API key (optional - works with fake data by default)
+- **No API key required** - The app uses locally generated fake data
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/FungC10/insightboard.git
+   git clone https://github.com/pazu/insightboard.git
    cd insightboard
    ```
 
@@ -49,17 +49,7 @@ A modern, professional-grade cryptocurrency market dashboard built with Next.js 
    npm install
    ```
 
-3. **Set up environment variables**
-   ```bash
-   # Copy the example environment file
-   cp .env.example .env.local
-   
-   # Edit .env.local and add your API key
-   USE_FAKE_DATA=0
-   PROVIDER_API_KEY=your_coingecko_api_key_here
-   ```
-
-4. **Run the development server**
+3. **Run the development server**
    ```bash
    npm run dev
    ```
@@ -87,7 +77,8 @@ insightboard/
 │   └── ui/                # UI components
 ├── lib/                   # Utility libraries
 │   ├── constants.ts       # App constants
-│   ├── fetcher.ts         # Data fetching logic
+│   ├── fakeData.ts        # Local fake data generator
+│   ├── fetcher.ts         # Data fetching logic (legacy)
 │   ├── types.ts           # TypeScript types
 │   ├── useCoins.ts        # React Query hook
 │   └── zod.ts             # Zod schemas
@@ -97,40 +88,30 @@ insightboard/
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Data Source
 
-Create a `.env.local` file in the root directory:
+**The app uses a mocked API layer backed by deterministic fake data.** No API configuration or API keys are required.
 
-```env
-# Data source configuration
-USE_FAKE_DATA=1                    # Set to 0 for real data
-PROVIDER_API_KEY=your_api_key      # CoinGecko API key
+The fake data includes:
+- **Bitcoin (BTC)** - Sample price data with realistic variations
+- **Ethereum (ETH)** - Sample price data with realistic variations
+- **Cardano (ADA)** - Sample price data with realistic variations
+
+All data is generated locally using deterministic algorithms that create realistic price history with natural variations. The data flows through the `/api/coins` endpoint, providing a production-shaped architecture with demo-safe data. This ensures:
+- **Stable demos** - Reproducible results every time
+- **Reproducible charts** - Consistent data for testing
+- **No external dependencies** - Works completely offline
+
+## 📊 Data Structure
+
+The app uses the `/api/coins` endpoint as the single source of data. All data access flows through this API boundary, which is backed by deterministic fake data.
+
+**API Endpoint:**
+```
+GET /api/coins?ids=bitcoin,ethereum
 ```
 
-### API Configuration
-
-The app supports two data modes:
-
-1. **Fake Data Mode** (`USE_FAKE_DATA=1`)
-   - Uses hardcoded Bitcoin and Ethereum data
-   - Perfect for development and testing
-   - No API key required
-
-2. **Real Data Mode** (`USE_FAKE_DATA=0`)
-   - Fetches live data from CoinGecko API
-   - Requires valid API key
-   - Rate limited by CoinGecko
-
-## 📊 API Endpoints
-
-### GET `/api/coins?ids=bitcoin,ethereum`
-
-Returns cryptocurrency data for specified coin IDs.
-
-**Query Parameters:**
-- `ids` (required): Comma-separated list of coin IDs
-
-**Response:**
+**Response Format:**
 ```json
 {
   "coins": [
@@ -152,6 +133,13 @@ Returns cryptocurrency data for specified coin IDs.
   ]
 }
 ```
+
+**Architecture:**
+- All data flows through `/api/coins` endpoint
+- Fake data generation lives in `lib/fakeData.ts`
+- React Query hooks fetch via HTTP (`fetch('/api/coins?...')`)
+- Clean swap path to real backend later
+- Production-shaped architecture with demo-safe data
 
 ## 🎨 UI Components
 
@@ -216,7 +204,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
-- [CoinGecko](https://www.coingecko.com/) for providing the cryptocurrency API
 - [Next.js](https://nextjs.org/) for the amazing React framework
 - [Tailwind CSS](https://tailwindcss.com/) for the utility-first CSS framework
 - [Recharts](https://recharts.org/) for the beautiful chart components
@@ -225,10 +212,14 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you have any questions or need help, please:
 
-1. Check the [Issues](https://github.com/FungC10/insightboard/issues) page
+1. Check the [Issues](https://github.com/pazu/insightboard/issues) page
 2. Create a new issue if your problem isn't already reported
 3. Join our community discussions
 
 ---
 
-**Built with ❤️ by [FungC10](https://github.com/FungC10)**
+**Built with ❤️ by [pazu](https://github.com/pazu)**
+
+
+
+

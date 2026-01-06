@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getCoins } from '@/lib/fetcher'
+import { FAKE_COINS } from '@/lib/fakeData'
 import { CoinsResponseSchema } from '@/lib/zod'
+
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
@@ -24,8 +26,15 @@ export async function GET(request: NextRequest) {
       )
     }
     
-    // Fetch coins data
-    const coins = await getCoins(ids)
+    // Filter fake coins by requested IDs
+    const coins = FAKE_COINS.filter(coin => ids.includes(coin.id))
+    
+    if (coins.length === 0) {
+      return NextResponse.json(
+        { error: `No coins found for IDs: ${ids.join(', ')}` },
+        { status: 404 }
+      )
+    }
     
     // Validate response with Zod
     const response = { coins }

@@ -4,7 +4,7 @@ import { LineChart, Line, XAxis, YAxis, ResponsiveContainer } from 'recharts'
 import { CHART_CONFIG } from '@/lib/constants'
 
 interface PriceLineProps {
-  data: { t: number; p: number }[]
+  data: { timestamp: number; price: number }[]
   height?: number
 }
 
@@ -25,21 +25,21 @@ export default function PriceLine({ data, height = CHART_CONFIG.defaultHeight }:
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={CHART_CONFIG.margins}>
           <XAxis 
-            dataKey="t" 
+            dataKey="timestamp" 
             type="number" 
             scale="time" 
             domain={['dataMin', 'dataMax']}
             hide
           />
           <YAxis 
-            dataKey="p" 
+            dataKey="price" 
             type="number" 
             domain={['dataMin', 'dataMax']}
             hide
           />
           <Line 
             type="monotone" 
-            dataKey="p" 
+            dataKey="price" 
             stroke={CHART_CONFIG.strokeColor}
             strokeWidth={CHART_CONFIG.strokeWidth}
             dot={false}
