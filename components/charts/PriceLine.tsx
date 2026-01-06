@@ -7,7 +7,6 @@ import {
   YAxis,
   ResponsiveContainer,
   Tooltip,
-  ReferenceArea,
   ReferenceDot,
 } from 'recharts'
 import { CHART_CONFIG } from '@/lib/constants'
@@ -163,6 +162,17 @@ export default function PriceLine({
   // Apply smoothing for presentation only
   const displayData = movingAverage(data, window)
 
+  const chartData = comparison
+    ? displayData.map(p => ({
+        ...p,
+        highlightPrice:
+          p.timestamp >= comparison.older.timestamp &&
+          p.timestamp <= comparison.newer.timestamp
+            ? p.price
+            : null,
+      }))
+    : displayData.map(p => ({ ...p, highlightPrice: null }))
+
   // Calculate Y-axis domain with padding
   const prices = displayData.map(d => d.price)
   const minPrice = Math.min(...prices)
@@ -187,7 +197,7 @@ export default function PriceLine({
       )}
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
-          data={displayData}
+          data={chartData}
           margin={CHART_CONFIG.margins}
           onMouseDown={e => {
             const p = e?.activePayload?.[0]?.payload as
@@ -220,6 +230,24 @@ export default function PriceLine({
               <stop offset="5%" stopColor={color} stopOpacity={0.3} />
               <stop offset="95%" stopColor={color} stopOpacity={0} />
             </linearGradient>
+            <linearGradient
+              id={`highlight-gradient-${symbol}`}
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                stopColor={comparison?.stroke ?? color}
+                stopOpacity={0.22}
+              />
+              <stop
+                offset="95%"
+                stopColor={comparison?.stroke ?? color}
+                stopOpacity={0}
+              />
+            </linearGradient>
           </defs>
           <XAxis
             dataKey="timestamp"
@@ -247,12 +275,13 @@ export default function PriceLine({
           />
           {comparison && (
             <>
-              <ReferenceArea
-                x1={comparison.older.timestamp}
-                x2={comparison.newer.timestamp}
-                stroke={comparison.stroke}
-                fill={comparison.fill}
-                ifOverflow="extendDomain"
+              <Area
+                type="monotone"
+                dataKey="highlightPrice"
+                stroke="none"
+                fill={`url(#highlight-gradient-${symbol})`}
+                isAnimationActive={false}
+                connectNulls={false}
               />
               <ReferenceDot
                 x={comparison.older.timestamp}
