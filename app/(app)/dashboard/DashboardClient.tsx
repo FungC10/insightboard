@@ -10,7 +10,11 @@ import { Badge } from '@/components/ui/Badge'
 
 export default function DashboardClient() {
   const [range, setRange] = useState<TimeRange>('1D')
-  const { data: coins, isLoading, error } = useCoins(['bitcoin', 'ethereum'], range)
+  const {
+    data: coins,
+    isLoading,
+    error,
+  } = useCoins(['bitcoin', 'ethereum'], range)
 
   if (isLoading) {
     return (
@@ -168,7 +172,7 @@ export default function DashboardClient() {
         {/* Time Range Selector */}
         <div className="mb-8 flex justify-center">
           <div className="inline-flex bg-white/80 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-gray-200">
-            {(['1D', '7D', '1M', '1Y'] as TimeRange[]).map((r) => (
+            {(['1D', '7D', '1M', '1Y'] as TimeRange[]).map(r => (
               <button
                 key={r}
                 onClick={() => setRange(r)}
