@@ -13,7 +13,11 @@ import {
 import { CHART_CONFIG } from '@/lib/constants'
 import { TimeRange } from '@/lib/types'
 import { movingAverage } from '@/lib/smooth'
-import { formatPercentDelta, formatUsdDelta, formatUsdPrice } from '@/lib/format'
+import {
+  formatPercentDelta,
+  formatUsdDelta,
+  formatUsdPrice,
+} from '@/lib/format'
 import { useMemo, useState } from 'react'
 
 interface PriceLineProps {
@@ -95,17 +99,6 @@ export default function PriceLine({
   symbol = 'BTC',
   color = CHART_CONFIG.strokeColor,
 }: PriceLineProps) {
-  if (!data || data.length === 0) {
-    return (
-      <div
-        className="flex items-center justify-center bg-gray-100 rounded"
-        style={{ height }}
-      >
-        <span className="text-gray-500">No data available</span>
-      </div>
-    )
-  }
-
   const [dragAnchor, setDragAnchor] = useState<{
     timestamp: number
     price: number
@@ -115,23 +108,6 @@ export default function PriceLine({
     price: number
   } | null>(null)
   const [isDragging, setIsDragging] = useState(false)
-
-  // Calculate smoothing window based on time per point and coin
-  const stepMs = estimateStepMs(data)
-  const targetMs = rangeSmoothingMs[range] || 0
-  const smoothingFactor = coinSmoothingFactor[symbol] || 1
-  const rawWindow = Math.max(
-    1,
-    Math.round((targetMs / stepMs) * smoothingFactor)
-  )
-  const cappedWindow = Math.min(rawWindow, data.length)
-  const window =
-    cappedWindow % 2 === 0
-      ? Math.min(cappedWindow + 1, data.length)
-      : cappedWindow
-
-  // Apply smoothing for presentation only
-  const displayData = movingAverage(data, window)
 
   const comparison = useMemo(() => {
     if (!dragAnchor || !dragCurrent) return null
@@ -159,6 +135,34 @@ export default function PriceLine({
     }
   }, [dragAnchor, dragCurrent])
 
+  if (!data || data.length === 0) {
+    return (
+      <div
+        className="flex items-center justify-center bg-gray-100 rounded"
+        style={{ height }}
+      >
+        <span className="text-gray-500">No data available</span>
+      </div>
+    )
+  }
+
+  // Calculate smoothing window based on time per point and coin
+  const stepMs = estimateStepMs(data)
+  const targetMs = rangeSmoothingMs[range] || 0
+  const smoothingFactor = coinSmoothingFactor[symbol] || 1
+  const rawWindow = Math.max(
+    1,
+    Math.round((targetMs / stepMs) * smoothingFactor)
+  )
+  const cappedWindow = Math.min(rawWindow, data.length)
+  const window =
+    cappedWindow % 2 === 0
+      ? Math.min(cappedWindow + 1, data.length)
+      : cappedWindow
+
+  // Apply smoothing for presentation only
+  const displayData = movingAverage(data, window)
+
   // Calculate Y-axis domain with padding
   const prices = displayData.map(d => d.price)
   const minPrice = Math.min(...prices)
@@ -176,7 +180,8 @@ export default function PriceLine({
             className="mt-0.5 font-semibold"
             style={{ color: comparison.stroke }}
           >
-            {formatUsdDelta(comparison.delta)} ({formatPercentDelta(comparison.percent)})
+            {formatUsdDelta(comparison.delta)} (
+            {formatPercentDelta(comparison.percent)})
           </div>
         </div>
       )}
@@ -231,10 +236,7 @@ export default function PriceLine({
             tick={{ fontSize: 12 }}
           />
           <Tooltip
-            formatter={(value: number) => [
-              formatUsdPrice(value),
-              'Price',
-            ]}
+            formatter={(value: number) => [formatUsdPrice(value), 'Price']}
             labelFormatter={(label: number) => formatTimestamp(label, range)}
             contentStyle={{
               backgroundColor: 'rgba(255, 255, 255, 0.95)',

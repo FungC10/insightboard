@@ -75,10 +75,12 @@ export function generateMarketHistory(
         0.55 +
       Math.cos(
         (pointTimeElapsedDays * TWO_PI) / (15 / freq) + marketPhase * 0.4
-      ) * 0.25
+      ) *
+        0.25
     const yearlyWave =
-      Math.sin((pointTimeElapsedDays * TWO_PI) / (365 / freq) + marketPhase * 0.3) *
-      0.4
+      Math.sin(
+        (pointTimeElapsedDays * TWO_PI) / (365 / freq) + marketPhase * 0.3
+      ) * 0.4
 
     const volatilityMix: Record<TimeRange, number> = {
       // Heavier intraday noise for short ranges; heavier seasonal components for long ranges.
