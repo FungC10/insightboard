@@ -224,38 +224,40 @@ export default function PriceLine({
 
     if (typeof hoveredPrice !== 'number' || typeof ts !== 'number') return null
 
-    const isComparing = isDragging && !!dragAnchor
-    const selectedPrice = dragAnchor?.price
-
-    const delta =
-      isComparing && typeof selectedPrice === 'number'
-        ? hoveredPrice - selectedPrice
-        : null
-    const percent =
-      isComparing && typeof selectedPrice === 'number' && selectedPrice !== 0
-        ? (delta! / selectedPrice) * 100
-        : null
-
-    const isUp = (delta ?? 0) >= 0
-    const deltaColor = isUp ? '#16a34a' : '#dc2626'
+    const isComparing = isDragging && !!comparison
 
     return (
       <div className="rounded-lg border border-gray-200 bg-white/95 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
-        <div className="mb-1 text-[11px] font-semibold text-gray-800">
-          {formatTimestamp(ts, range)}
-        </div>
-
         {!isComparing ? (
-          <div className="font-semibold text-gray-900">
-            {formatUsdPrice(hoveredPrice)}
-          </div>
+          <>
+            <div className="mb-1 text-[11px] font-semibold text-gray-800">
+              {formatTimestamp(ts, range)}
+            </div>
+            <div className="font-semibold text-gray-900">
+              {formatUsdPrice(hoveredPrice)}
+            </div>
+          </>
         ) : (
-          <div className="font-semibold text-gray-900">
-            {formatUsdPrice(selectedPrice!)} → {formatUsdPrice(hoveredPrice)}{' '}
-            <span className="ml-2" style={{ color: deltaColor }}>
-              {formatUsdDelta(delta!)} ({formatPercentDelta(percent ?? 0)})
-            </span>
-          </div>
+          <>
+            <div
+              className="mb-1 font-semibold"
+              style={{ color: comparison!.stroke }}
+            >
+              {formatPercentDelta(comparison!.percent)}
+            </div>
+            <div className="font-semibold text-gray-900">
+              <span className="text-[11px] font-semibold text-gray-800">
+                {formatTimestamp(comparison!.older.timestamp, range)}{' '}
+              </span>
+              {formatUsdPrice(comparison!.older.price)}
+            </div>
+            <div className="font-semibold text-gray-900">
+              <span className="text-[11px] font-semibold text-gray-800">
+                {formatTimestamp(comparison!.newer.timestamp, range)}{' '}
+              </span>
+              {formatUsdPrice(comparison!.newer.price)}
+            </div>
+          </>
         )}
       </div>
     )
