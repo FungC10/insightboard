@@ -331,9 +331,7 @@ export default function PriceLine({
             hide
             tick={{ fontSize: 12 }}
           />
-          <Tooltip
-            content={<CustomTooltip />}
-          />
+          <Tooltip content={<CustomTooltip />} />
           {comparison && (
             <>
               <Area
