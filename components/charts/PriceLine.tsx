@@ -108,11 +108,15 @@ export default function PriceLine({
   } | null>(null)
   const [isDragging, setIsDragging] = useState(false)
 
-  // If the timeframe changes, cancel any active comparison selection.
-  useEffect(() => {
+  function resetSelection() {
     setIsDragging(false)
     setDragAnchor(null)
     setDragCurrent(null)
+  }
+
+  // If the timeframe changes, cancel any active comparison selection.
+  useEffect(() => {
+    resetSelection()
   }, [range])
 
   const comparison = useMemo(() => {
@@ -188,7 +192,7 @@ export default function PriceLine({
 
   return (
     <div style={{ height }} className="relative">
-      {comparison && !isDragging && (
+      {comparison && isDragging && (
         <div className="absolute left-3 top-3 z-10 rounded-lg border border-gray-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
           <div className="font-semibold text-gray-900">
             {formatUsdPrice(comparison.newer.price)}
@@ -223,8 +227,8 @@ export default function PriceLine({
             if (!p) return
             setDragCurrent({ timestamp: p.timestamp, price: p.price })
           }}
-          onMouseUp={() => setIsDragging(false)}
-          onMouseLeave={() => setIsDragging(false)}
+          onMouseUp={() => resetSelection()}
+          onMouseLeave={() => resetSelection()}
         >
           <defs>
             <linearGradient
