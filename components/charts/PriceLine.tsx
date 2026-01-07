@@ -194,13 +194,7 @@ export default function PriceLine({
     <div style={{ height }} className="relative">
       {comparison && isDragging && (
         <div className="absolute left-3 top-3 z-10 rounded-lg border border-gray-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
-          <div className="font-semibold text-gray-900">
-            {formatUsdPrice(comparison.newer.price)}
-          </div>
-          <div
-            className="mt-0.5 font-semibold"
-            style={{ color: comparison.stroke }}
-          >
+          <div className="font-semibold" style={{ color: comparison.stroke }}>
             {formatUsdDelta(comparison.delta)} (
             {formatPercentDelta(comparison.percent)})
           </div>
