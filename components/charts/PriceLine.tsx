@@ -17,7 +17,7 @@ import {
   formatUsdDelta,
   formatUsdPrice,
 } from '@/lib/format'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 interface PriceLineProps {
   data: { timestamp: number; price: number }[]
@@ -107,6 +107,14 @@ export default function PriceLine({
     price: number
   } | null>(null)
   const [isDragging, setIsDragging] = useState(false)
+
+  // If the user changes the timeframe (or the underlying data swaps),
+  // cancel any active comparison selection to avoid "jumping" and domain issues.
+  useEffect(() => {
+    setIsDragging(false)
+    setDragAnchor(null)
+    setDragCurrent(null)
+  }, [range, data])
 
   const comparison = useMemo(() => {
     if (!dragAnchor || !dragCurrent) return null
@@ -290,7 +298,7 @@ export default function PriceLine({
                 fill={comparison.stroke}
                 stroke="#ffffff"
                 strokeWidth={2}
-                ifOverflow="extendDomain"
+                ifOverflow="discard"
               />
               <ReferenceDot
                 x={comparison.newer.timestamp}
@@ -299,7 +307,7 @@ export default function PriceLine({
                 fill={comparison.stroke}
                 stroke="#ffffff"
                 strokeWidth={2}
-                ifOverflow="extendDomain"
+                ifOverflow="discard"
               />
             </>
           )}
