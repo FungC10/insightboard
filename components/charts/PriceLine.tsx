@@ -190,16 +190,79 @@ export default function PriceLine({
   const maxPrice = Math.max(...prices)
   const yDomain = [minPrice * 0.98, maxPrice * 1.02]
 
+  type TooltipPayloadItem = {
+    dataKey?: string
+    value?: number
+    payload?: { timestamp: number; price: number }
+  }
+
+  function CustomTooltip({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean
+    payload?: TooltipPayloadItem[]
+    label?: number
+  }) {
+    if (!active || !payload || payload.length === 0) return null
+
+    // Prefer the real series so we don't accidentally render highlightPrice (which duplicates "Price")
+    const priceItem =
+      payload.find(p => p.dataKey === 'price') ??
+      payload.find(p => typeof p?.payload?.price === 'number') ??
+      payload[0]
+
+    const point = priceItem?.payload
+    const hoveredPrice = point?.price
+    const ts =
+      typeof point?.timestamp === 'number'
+        ? point.timestamp
+        : typeof label === 'number'
+          ? label
+          : undefined
+
+    if (typeof hoveredPrice !== 'number' || typeof ts !== 'number') return null
+
+    const isComparing = isDragging && !!dragAnchor
+    const selectedPrice = dragAnchor?.price
+
+    const delta =
+      isComparing && typeof selectedPrice === 'number'
+        ? hoveredPrice - selectedPrice
+        : null
+    const percent =
+      isComparing && typeof selectedPrice === 'number' && selectedPrice !== 0
+        ? (delta! / selectedPrice) * 100
+        : null
+
+    const isUp = (delta ?? 0) >= 0
+    const deltaColor = isUp ? '#16a34a' : '#dc2626'
+
+    return (
+      <div className="rounded-lg border border-gray-200 bg-white/95 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
+        <div className="mb-1 text-[11px] font-semibold text-gray-800">
+          {formatTimestamp(ts, range)}
+        </div>
+
+        {!isComparing ? (
+          <div className="font-semibold text-gray-900">
+            {formatUsdPrice(hoveredPrice)}
+          </div>
+        ) : (
+          <div className="font-semibold text-gray-900">
+            {formatUsdPrice(selectedPrice!)} → {formatUsdPrice(hoveredPrice)}{' '}
+            <span className="ml-2" style={{ color: deltaColor }}>
+              {formatUsdDelta(delta!)} ({formatPercentDelta(percent ?? 0)})
+            </span>
+          </div>
+        )}
+      </div>
+    )
+  }
+
   return (
     <div style={{ height }} className="relative">
-      {comparison && isDragging && (
-        <div className="absolute left-3 top-3 z-10 rounded-lg border border-gray-200 bg-white/90 px-3 py-2 text-xs shadow-sm backdrop-blur-sm">
-          <div className="font-semibold" style={{ color: comparison.stroke }}>
-            {formatUsdDelta(comparison.delta)} (
-            {formatPercentDelta(comparison.percent)})
-          </div>
-        </div>
-      )}
       <ResponsiveContainer width="100%" height="100%">
         <AreaChart
           data={chartData}
@@ -269,14 +332,7 @@ export default function PriceLine({
             tick={{ fontSize: 12 }}
           />
           <Tooltip
-            formatter={(value: number) => [formatUsdPrice(value), 'Price']}
-            labelFormatter={(label: number) => formatTimestamp(label, range)}
-            contentStyle={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              border: '1px solid #e5e7eb',
-              borderRadius: '8px',
-              padding: '8px 12px',
-            }}
+            content={<CustomTooltip />}
           />
           {comparison && (
             <>
