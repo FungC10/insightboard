@@ -5,6 +5,11 @@ export type TimeRange = '1D' | '7D' | '1M' | '1Y'
 export interface MarketState {
   seed: number
   startTime: number
+  /**
+   * Stable "as-of" timestamp for snapshot pricing.
+   * We keep this fixed so changing chart range doesn't change currentPrice.
+   */
+  asOfTime: number
   basePrices: Record<string, number>
 }
 

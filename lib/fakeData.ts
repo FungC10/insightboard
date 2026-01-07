@@ -158,7 +158,9 @@ function calculateCurrentPrice(
   coinSeed: number,
   marketState: MarketState
 ): number {
-  const timeElapsed = (Date.now() - marketState.startTime) / (1000 * 60 * 60)
+  // Use a stable snapshot time so toggling chart range doesn't change "current price"
+  const timeElapsed =
+    (marketState.asOfTime - marketState.startTime) / (1000 * 60 * 60)
   const phase = coinSeed * 0.37
   const marketPhase = marketState.seed * 0.123
 
@@ -184,7 +186,7 @@ function calculate24hChange(
   coinSeed: number,
   marketState: MarketState
 ): number {
-  const now = Date.now()
+  const now = marketState.asOfTime
   const timeElapsed = (now - marketState.startTime) / (1000 * 60 * 60)
   const timeElapsed24h =
     (now - 24 * 60 * 60 * 1000 - marketState.startTime) / (1000 * 60 * 60)

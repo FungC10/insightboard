@@ -50,9 +50,11 @@ export function getOrCreateMarketState(): MarketState {
 
     // Create new market state
     const seed = generateSeedFromTime()
+    const now = Date.now()
     serverMarketState = {
       seed,
-      startTime: Date.now(),
+      startTime: now,
+      asOfTime: now,
       basePrices: { ...INITIAL_BASE_PRICES },
     }
 
@@ -63,7 +65,7 @@ export function getOrCreateMarketState(): MarketState {
   try {
     const stored = localStorage.getItem(MARKET_STATE_KEY)
     if (stored) {
-      const parsed = JSON.parse(stored) as MarketState
+      const parsed = JSON.parse(stored) as Partial<MarketState>
       // Validate structure
       if (
         parsed.seed &&
@@ -72,7 +74,16 @@ export function getOrCreateMarketState(): MarketState {
         typeof parsed.seed === 'number' &&
         typeof parsed.startTime === 'number'
       ) {
-        return parsed
+        // Back-compat: older stored state may not have asOfTime
+        return {
+          seed: parsed.seed,
+          startTime: parsed.startTime,
+          asOfTime:
+            typeof parsed.asOfTime === 'number'
+              ? parsed.asOfTime
+              : parsed.startTime,
+          basePrices: parsed.basePrices,
+        }
       }
     }
   } catch (error) {
@@ -81,9 +92,11 @@ export function getOrCreateMarketState(): MarketState {
 
   // Create new market state
   const seed = generateSeedFromTime()
+  const now = Date.now()
   const newState: MarketState = {
     seed,
-    startTime: Date.now(),
+    startTime: now,
+    asOfTime: now,
     basePrices: { ...INITIAL_BASE_PRICES },
   }
 
@@ -103,9 +116,11 @@ export function resetMarket(): MarketState {
   // Server-side
   if (typeof window === 'undefined') {
     const seed = generateSeedFromTime()
+    const now = Date.now()
     serverMarketState = {
       seed,
-      startTime: Date.now(),
+      startTime: now,
+      asOfTime: now,
       basePrices: { ...INITIAL_BASE_PRICES },
     }
     return serverMarketState
@@ -113,9 +128,11 @@ export function resetMarket(): MarketState {
 
   // Client-side
   const seed = generateSeedFromTime()
+  const now = Date.now()
   const newState: MarketState = {
     seed,
-    startTime: Date.now(),
+    startTime: now,
+    asOfTime: now,
     basePrices: { ...INITIAL_BASE_PRICES },
   }
 
